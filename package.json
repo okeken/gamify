@@ -20,10 +20,8 @@
     "next": "^12.2.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-loading-skeleton": "^3.0.1",
+    "react-icons": "^4.4.0",
     "react-redux": "^7.2.5",
-    "slugify": "^1.6.1",
-    "styled-components": "^5.3.3",
     "tailwindcss": "^3.1.8",
     "twin.macro": "^2.8.0"
   },
