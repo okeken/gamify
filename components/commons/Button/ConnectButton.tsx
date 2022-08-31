@@ -7,7 +7,6 @@ const ConnectButton = () => {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, isConnecting, show, address, ensName }) => {
-        console.log(isConnected)
         return (<>
             <Button 
             disabled={isConnecting}

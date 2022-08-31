@@ -1,4 +1,4 @@
-{
+{   "APP_NAME":"Gamify",
     "CHAIN_ID": "",
     "CHAIN_ID_DEC": "",
     "CHAIN_NAME": "",
@@ -6,5 +6,5 @@
     "CURRENCY_SYMBOL": "Eth",
     "RPC": "",
     "BLOCK_EXPLORER": "",
-    "TOKEN_ADDRESS": ""
+    "GAME_ADDRESS": ""
   }
