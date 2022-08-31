@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "connectkit": "^0.0.2",
     "ethers": "^5.5.1",
     "next": "^12.2.5",
     "react": "17.0.2",
@@ -23,7 +24,8 @@
     "react-icons": "^4.4.0",
     "react-redux": "^7.2.5",
     "tailwindcss": "^3.1.8",
-    "twin.macro": "^2.8.0"
+    "twin.macro": "^2.8.0",
+    "wagmi": "^0.6.4"
   },
   "devDependencies": {
     "@types/node": "17.0.35",

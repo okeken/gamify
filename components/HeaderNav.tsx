@@ -1,4 +1,6 @@
+import { ConnectKitButton } from 'connectkit'
 import React from 'react'
+import ConnectButton from './commons/Button/ConnectButton'
 import Discord from './commons/Icons/Discord'
 import Twitter from './commons/Icons/Twitter'
 
@@ -14,8 +16,8 @@ export const HeaderNav = ()=>{
               <Discord className='mr-8'/>
               <Twitter className='mr-8' />
             </div>
-            <button className='p-2 px-4 border border-yellow-600 rounded-md'>Connect Wallet</button>
-          </div>
+            <ConnectButton />
+            </div>
         </div>
         </div>
   </div>
