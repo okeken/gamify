@@ -1,50 +1,35 @@
-import React from 'react'
-import "../styles/global.css"
-import { WagmiConfig, createClient, chain, } from "wagmi";
+import React, { useEffect } from "react";
+import "../styles/global.css";
+import "react-toastify/dist/ReactToastify.css";
+import { WagmiConfig, createClient } from "wagmi";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
-import { Layout } from '../components/Layout/MainLayout';
-import chains from "../config/networks"
+import { Layout } from "../components/Layout/MainLayout";
+import { ToastContainer } from "react-toastify";
+import chains from "../config/networks";
 
 const alchemyId = process.env.ALCHEMY_ID;
 
-
 const client = createClient(
   getDefaultClient({
-    appName: "Your App Name",
+    appName: "Gamify",
     alchemyId,
-   chains,
-  }),
+    chains,
+  })
 );
 
-
-// const client = createClient({
-//   autoConnect: true,
-//   connectors: [
-//     new InjectedConnector({ chains }),
-//     new WalletConnectConnector({
-//       chains: chains,
-//       options: {
-//         qrcode: false,
-//       },
-//     }),
-//   ],
-//   provider,
-// });
-
-
 function MyApp({ Component, pageProps }) {
-  return <>
-<WagmiConfig client={client}>
-<ConnectKitProvider>
-<Layout>
-  <Component {...pageProps} />
-</Layout>
-</ConnectKitProvider> 
-  </WagmiConfig>
-  </>
+  return (
+    <>
+      <ToastContainer />
+      <WagmiConfig client={client}>
+        <ConnectKitProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ConnectKitProvider>
+      </WagmiConfig>
+    </>
+  );
 }
 
-export default MyApp
-
-
-
+export default MyApp;

@@ -1,11 +1,12 @@
-import { ethers } from 'ethers'
-import  abi from '../abis/abi.json'
+import { ethers } from "ethers";
+import abi from "../abis/abi.js";
 
-const rpc = (address ='')=>{
-    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL)
-    const tokenContract = new ethers.Contract(address,abi, provider)
-    return tokenContract;
-}
+const rpc = (address = "") => {
+  const provider = new ethers.providers.JsonRpcProvider(
+    process.env.NEXT_PUBLIC_RPC_URL
+  );
+  const tokenContract = new ethers.Contract(address, abi, provider);
+  return tokenContract;
+};
 
 export default rpc;
-
