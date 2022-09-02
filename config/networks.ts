@@ -31,10 +31,10 @@ const bsc = {
 };
 
 const chains = [
+  chain.goerli,
   bsc,
   chain.mainnet,
   chain.polygon,
   avalancheChain,
-  chain.goerli,
 ];
 export default chains;

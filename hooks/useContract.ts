@@ -4,6 +4,8 @@ import {
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
+  useFeeData,
+  useNetwork
 } from "wagmi";
 import ABI from "../abis/abi.js";
 // import config from "../config/config.json"
@@ -12,23 +14,28 @@ import { parseEther } from "ethers/lib/utils";
 import useToast from "../utils/useToast";
 import { EType } from "../Enums";
 
+
 const contractObj = {
   isSigner: false,
   address: dappConfig.GAME_ADDRESS,
   funcName: "",
   abi: ABI,
   args: [],
-  successCallBack: (msg: any) => {},
+  successCallBack: (any) => {},
   errorCallBack: (error: any) => {},
   successCallBackConfirm: (msg: any) => {},
   errorCallBackConfirm: (error: any) => {},
   sendValue: { status: false, amt: "" },
 };
 
-const useContract = (contractInput = {}) => {
-  const toast = useToast();
 
+const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},) => {
+  const toast = useToast();
+  const { data:feeData } = useFeeData()
+  const {chain} = useNetwork()
   const finalValue = { ...contractObj, ...contractInput };
+  // const numberOfOpenEnds  = useGetNumOfOpenEnds()
+  // const {loadData} = useData()
   const {
     abi,
     address,
@@ -46,24 +53,32 @@ const useContract = (contractInput = {}) => {
     addressOrName: address,
     contractInterface: abi,
     functionName: funcName,
+    chainId:chain?.id ??  Number(dappConfig.CHAIN_ID),
     ...{
       ...(sendValue.status && {
-        overrides: { value: parseEther(sendValue.amt) },
+        overrides: { 
+          gasPrice:feeData?.gasPrice,
+          value: parseEther(sendValue.amt) 
+        },
+        
       }),
     },
     args,
   });
 
-  const { writeAsync, ...otherData } = useContractWrite({
+  const { writeAsync, ...writeData } = useContractWrite({
     ...config,
   });
 
   useWaitForTransaction({
     confirmations: 1,
-    hash: otherData?.data?.hash,
+    hash: writeData?.data?.hash,
+
     onSuccess(msg) {
-      toast("transaction confirmed", otherData.data.hash, EType.success);
+      toast("transaction confirmed", writeData.data.hash, EType.success);
       successCallBackConfirm(msg);
+      // loadData(numberOfOpenEnds)
+      successCallbackAction(msg)
     },
     onError(error) {
       errorCallBackConfirm(error);
@@ -74,14 +89,16 @@ const useContract = (contractInput = {}) => {
     addressOrName: address,
     contractInterface: abi,
     functionName: funcName,
+    chainId:chain?.id ??  Number(dappConfig.CHAIN_ID),
   });
+
 
   const contract = useCallback(
     async () =>
       writeAsync?.()
         .then((data) => {
           successCallBack(data);
-          toast("transaction submitted successfully", otherData?.data?.hash);
+          toast("transaction submitted successfully", writeData?.data?.hash);
         })
 
         .catch((e) => {
@@ -91,7 +108,7 @@ const useContract = (contractInput = {}) => {
         }),
     [writeAsync]
   );
-  const data = isSigner ? otherData : readData;
+  const data = isSigner ? writeData : readData;
   return { contract, data };
 };
 

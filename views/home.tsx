@@ -1,32 +1,58 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useData from "../hooks/useData";
 import useJoin from "../hooks/useJoin";
 import { useSwitchNetwork, useNetwork } from "wagmi";
 import gameConfig from "../config/configGoerli.json";
 import useClaim from "../hooks/useClaim";
 import useEvent from "../hooks/useEvent";
+import useGetNumOfOpenEnds from "../hooks/useGetNumOfOpenEnds";
+import ClipBoard from "../components/commons/Icons/ClipBoard";
+import ClipBoardCheck from "../components/commons/Icons/ClipBoardCheck/index";
+import useGetOpenEnds from "../hooks/useGetOpenEnds";
 
-const joinConfig = {
-  name: "join",
-  isSigner: true,
-  sendValue: { status: true, amt: gameConfig.PAYMENT_AMOUNT },
-};
+
 
 const claimConfig = {
   name: "claim",
   isSigner: true,
   sendValue: { status: false },
 };
+
+const listCopy = {index:null}
 const Home = () => {
   const { chain, chains } = useNetwork();
+  const {data:walletList} = useData()
+  const [copyList, setCopyList]= useState(listCopy)
+  const [parentWallet, setParentWallet] = useState('')
+ const numberOfOpenEnds = useGetNumOfOpenEnds()     // get number of list
+//  console.log(numberOfOpenEnds,'open>>>')
+ const {contract:openMoreEnds} = useGetOpenEnds()
 
-  const { contract: joinContract, info } = useJoin(joinConfig);
-  const { claimContract } = useClaim(claimConfig);
-  const event = useEvent("availableList");
+  function clearJoin(){
+    // console.log('i ran clear')
+    setParentWallet(null)
+  }
+  
+  const joinConfig = {
+    name: "join",
+    isSigner: true,
+    sendValue: { status: true, amt: gameConfig.PAYMENT_AMOUNT },
+    successCallBackConfirm:clearJoin
+  };
+  const { contract: joinContract, info:joinInfo } = useJoin(joinConfig);
+  const { claimContract, claimInfo } = useClaim(claimConfig);
+  useEvent("availableList"); // Listen for event when wallet list is less than 10
+  
 
-  useEffect(() => {});
+  useEffect(() => {
+    if(numberOfOpenEnds <=10) {
+      openMoreEnds()
+    }
+  },[numberOfOpenEnds]);
+  
 
   const join = () => {
+    if(!parentWallet) return;
     joinContract();
   };
 
@@ -34,13 +60,44 @@ const Home = () => {
     claimContract();
   };
 
-  const _list = [].map((i, idx) => (
+  const setCopy=(index, value)=>{
+    setCopyList({index:null})
+    navigator.clipboard.writeText(value)
+    setCopyList({index})
+    setTimeout(()=>{
+      setCopyList({index:null})
+    },3000) 
+  }
+
+  const handleParentWallet =(e)=>{
+    setParentWallet(e.target.value)
+  }
+  const _list = walletList.map((i, idx) => (
+  
     <div
-      className="p-3 my-4 border border-blue-400 rounded-md cursor-pointer "
+      className="p-3 my-6 border border-blue-400 rounded-md cursor-pointer "
       key={idx}
     >
-      <span className="px-3">{idx + 1}</span>
-      {i}
+      <button
+      className="flex"
+      onClick={()=>setCopy(idx, i)}
+     >
+      <>
+      {idx + 1}
+         {i}
+         {
+          copyList.index ===idx 
+          ?
+           <div className="flex relative"> 
+            <span className="absolute -top-9">copied</span>
+           <ClipBoardCheck className="mx-2 text-gray-900 text-md" />
+            </div>
+           :  
+           <ClipBoard className="mx-2 text-gray-900 text-md" />
+         }
+        
+      </>
+       </button>
     </div>
   ));
   return (
@@ -80,25 +137,31 @@ const Home = () => {
           </div>
         </div>
         <div className="py-12 bg-gradient-to-br from-blue-100 to-purple-200">
-          <div className="flex flex-wrap justify-between max-w-5xl mx-auto">
+          <div className="flex flex-wrap justify-center md:justify-between max-w-5xl mx-auto">
             <div className="overflow-auto">{_list}</div>
             <div className="flex flex-col mx-auto text-center md:mx-0">
-              <div className="p-12 mt-4 border border-red-400">
-                <h2 className="mb-12 text-2xl">Parent Wallet</h2>
+              <div className="p-12 mt-4 border ">
+              
+                  <input 
+                  onChange={handleParentWallet}
+                  className="w-full rounded-md mb-12 text-xl bg-transparent border-blue-400 border p-2" />
+              
                 <button
                   onClick={join}
-                  className="w-full px-4 py-2 text-xl font-semibold text-center uppercase border border-yellow-600 rounded-md"
+
+                  className={`${joinInfo.isLoading ? 'cursor-not-allowed': ''} w-full px-4 py-3 text-xl font-semibold text-center uppercase border bg-yellow-600 rounded-md`}
                 >
-                  Join
+                 {joinInfo.isLoading ? 'Sending...': 'Join'}
                 </button>
               </div>
-              <div className="p-12 mt-4 border border-red-400">
+              <div className="p-12 mt-4">
                 <h2 className="mb-12 text-2xl">Eligible</h2>
                 <button
                   onClick={claim}
-                  className="w-full px-4 py-2 text-xl font-semibold text-center uppercase border border-yellow-600 rounded-md"
+
+                  className={`${claimInfo.isLoading ? 'cursor-not-allowed': ''} w-full px-4 py-3 text-xl font-semibold text-center uppercase border bg-yellow-600 rounded-md`}
                 >
-                  claim
+                 {claimInfo.isLoading ? 'Claiming...': 'Claim'}
                 </button>
               </div>
             </div>
