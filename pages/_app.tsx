@@ -6,6 +6,7 @@ import { ConnectKitProvider, getDefaultClient } from "connectkit";
 import { Layout } from "../components/Layout/MainLayout";
 import { ToastContainer } from "react-toastify";
 import chains from "../config/networks";
+import  GameProvider  from "../context/gameContext";
 
 const alchemyId = process.env.ALCHEMY_ID;
 
@@ -23,9 +24,11 @@ function MyApp({ Component, pageProps }) {
       <ToastContainer />
       <WagmiConfig client={client}>
         <ConnectKitProvider>
+          <GameProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
+          </GameProvider>
         </ConnectKitProvider>
       </WagmiConfig>
     </>

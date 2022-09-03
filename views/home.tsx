@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState,useContext } from "react";
 import useData from "../hooks/useData";
 import useJoin from "../hooks/useJoin";
-import { useSwitchNetwork, useNetwork } from "wagmi";
+import { useNetwork } from "wagmi";
 import gameConfig from "../config/configGoerli.json";
 import useClaim from "../hooks/useClaim";
-import useEvent from "../hooks/useEvent";
-import useGetNumOfOpenEnds from "../hooks/useGetNumOfOpenEnds";
 import ClipBoard from "../components/commons/Icons/ClipBoard";
 import ClipBoardCheck from "../components/commons/Icons/ClipBoardCheck/index";
-import useGetOpenEnds from "../hooks/useGetOpenEnds";
-
+import  {GameContext}  from "../context/gameContext";
 
 
 const claimConfig = {
@@ -19,17 +16,15 @@ const claimConfig = {
 };
 
 const listCopy = {index:null}
+
 const Home = () => {
+  const {data} = useContext(GameContext)
   const { chain, chains } = useNetwork();
   const {data:walletList} = useData()
   const [copyList, setCopyList]= useState(listCopy)
   const [parentWallet, setParentWallet] = useState('')
- const numberOfOpenEnds = useGetNumOfOpenEnds()     // get number of list
-//  console.log(numberOfOpenEnds,'open>>>')
- const {contract:openMoreEnds} = useGetOpenEnds()
 
   function clearJoin(){
-    // console.log('i ran clear')
     setParentWallet(null)
   }
   
@@ -41,14 +36,6 @@ const Home = () => {
   };
   const { contract: joinContract, info:joinInfo } = useJoin(joinConfig);
   const { claimContract, claimInfo } = useClaim(claimConfig);
-  useEvent("availableList"); // Listen for event when wallet list is less than 10
-  
-
-  useEffect(() => {
-    if(numberOfOpenEnds <=10) {
-      openMoreEnds()
-    }
-  },[numberOfOpenEnds]);
   
 
   const join = () => {
@@ -72,8 +59,8 @@ const Home = () => {
   const handleParentWallet =(e)=>{
     setParentWallet(e.target.value)
   }
-  const _list = walletList.map((i, idx) => (
-  
+
+  const _list = data.map((i, idx) => (  
     <div
       className="p-3 my-6 border border-blue-400 rounded-md cursor-pointer "
       key={idx}
@@ -88,7 +75,7 @@ const Home = () => {
          {
           copyList.index ===idx 
           ?
-           <div className="flex relative"> 
+           <div className="relative flex"> 
             <span className="absolute -top-9">copied</span>
            <ClipBoardCheck className="mx-2 text-gray-900 text-md" />
             </div>
@@ -100,6 +87,7 @@ const Home = () => {
        </button>
     </div>
   ));
+
   return (
     <>
       <div className="">
@@ -137,14 +125,14 @@ const Home = () => {
           </div>
         </div>
         <div className="py-12 bg-gradient-to-br from-blue-100 to-purple-200">
-          <div className="flex flex-wrap justify-center md:justify-between max-w-5xl mx-auto">
+          <div className="flex flex-wrap justify-center max-w-5xl mx-auto md:justify-between">
             <div className="overflow-auto">{_list}</div>
             <div className="flex flex-col mx-auto text-center md:mx-0">
               <div className="p-12 mt-4 border ">
               
                   <input 
                   onChange={handleParentWallet}
-                  className="w-full rounded-md mb-12 text-xl bg-transparent border-blue-400 border p-2" />
+                  className="w-full p-2 mb-12 text-xl bg-transparent border border-blue-400 rounded-md" />
               
                 <button
                   onClick={join}

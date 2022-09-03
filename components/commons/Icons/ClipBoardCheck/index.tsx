@@ -1,3 +1,4 @@
+import React from 'react'
 import { FaClipboardCheck } from "react-icons/fa";
 import Icons from "..";
 
@@ -9,4 +10,4 @@ const ClipBoardCheck = ({ className = "" }) => {
   );
 };
 
-export default ClipBoardCheck;
+export default React.memo(ClipBoardCheck);

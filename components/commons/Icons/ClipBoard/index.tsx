@@ -1,3 +1,4 @@
+import React from 'react'
 import { FaClone } from "react-icons/fa";
 import Icons from "..";
 
@@ -9,4 +10,4 @@ const ClipBoard = ({ className = "" }) => {
   );
 };
 
-export default ClipBoard;
+export default React.memo(ClipBoard);

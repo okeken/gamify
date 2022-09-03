@@ -4,30 +4,24 @@ import gameConfig from "../config/configGoerli.json";
 // import gameConfig from "../config/confi.json"
 import ABI from "../abis/abi";
 import useGetOpenEnds from "./useGetOpenEnds";
-import useData from "./useData";
 
 const useEvent = (name: string) => {
   const [number, setNumber] = useState({ mounted: false, value: null });
-  const { contract } = useGetOpenEnds(updateUI);
-
-  async function updateUI() {
-    await loadData(number.value)
-  }
-  const {loadData}  = useData()
+  const { contract } = useGetOpenEnds();
   const val = number.value
-  const updateData = useCallback(async(num)=>{
-  //  await contract();
-  },[])
+  const updateData = async()=>{
+    await contract();
+  }
+  
   useEffect(() => {
-    if ( number.value <= 10) {
-    updateData(number)
+    if (number.mounted && number.value <= 10) {
+    updateData()
     }
   }, [val]);
 
   const updateNumber =(num)=>{
     setNumber({mounted:true, value:num})
   }
-  
 
   useContractEvent({
     addressOrName: gameConfig.GAME_ADDRESS,

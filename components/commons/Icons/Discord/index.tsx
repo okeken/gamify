@@ -1,3 +1,4 @@
+import React from 'react'
 import { FaDiscord } from "react-icons/fa";
 import Icons from "..";
 
@@ -9,4 +10,4 @@ const Discord = ({ className = "" }) => {
   );
 };
 
-export default Discord;
+export default React.memo(Discord);

@@ -34,8 +34,7 @@ const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},
   const { data:feeData } = useFeeData()
   const {chain} = useNetwork()
   const finalValue = { ...contractObj, ...contractInput };
-  // const numberOfOpenEnds  = useGetNumOfOpenEnds()
-  // const {loadData} = useData()
+ 
   const {
     abi,
     address,
