@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { ConnectKitButton, useModal } from "connectkit";
 import Button from ".";
 
 const ConnectButton = () => {
+  const {isConnected}  = useAccount()
   const [walletAvailable, setWalletNotAvailable] = useState(undefined);
   const { open, setOpen } = useModal();
-  const {chain} = useNetwork()
   useEffect(() => {
-    if (typeof window.ethereum == "undefined") {
+    if (typeof window.ethereum == "undefined" ) {
       setWalletNotAvailable(true);
     } else {
+      if(isConnected) return;
       if (!open) setOpen(true);
     }
   }, []);

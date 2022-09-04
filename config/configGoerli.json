@@ -8,5 +8,35 @@
   "RPC": "",
   "BLOCK_EXPLORER": "",
   "GAME_ADDRESS": "0x04D8C11e38C717A74A9432e6d874211500cb1Fe6",
-  "PAYMENT_AMOUNT": "1"
+  "PAYMENT_AMOUNT": "1",
+  "chains":{
+    "default":{
+      "address":"0x04D8C11e38C717A74A9432e6d874211500cb1Fe6",
+      "rpcUrl":"https://goerli.infura.io/v3/ba80361523fe423bb149026a490266f0"
+    },
+    "goerli":{
+      "address":"0x04D8C11e38C717A74A9432e6d874211500cb1Fe6",
+      "rpcUrl":"https://goerli.infura.io/v3/ba80361523fe423bb149026a490266f0"
+    },
+    "smart chain":{
+      "address":"",
+      "rpcUrl":""
+    },
+    "homestead":{
+      "address":"",
+      "rpcUrl":""
+    },
+    "rinkeby":{
+      "address":"0xF948598F46c418EBA11cc477c9605e75e536303B",
+      "rpcUrl":"https://rinkeby.infura.io/v3/ba80361523fe423bb149026a490266f0"
+    },
+    "Avax":{
+      "address":"",
+      "rpcUrl":""
+    },
+    "matic":{
+      "address":"",
+      "rpcUrl":""
+    }
+  }
 }

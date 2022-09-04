@@ -7,6 +7,7 @@ import useClaim from "../hooks/useClaim";
 import ClipBoard from "../components/commons/Icons/ClipBoard";
 import ClipBoardCheck from "../components/commons/Icons/ClipBoardCheck/index";
 import  {GameContext}  from "../context/gameContext";
+import truncateAddress from "../utils/truncateAddress";
 
 
 const claimConfig = {
@@ -19,8 +20,7 @@ const listCopy = {index:null}
 
 const Home = () => {
   const {data} = useContext(GameContext)
-  const { chain, chains } = useNetwork();
-  const {data:walletList} = useData()
+
   const [copyList, setCopyList]= useState(listCopy)
   const [parentWallet, setParentWallet] = useState('')
 
@@ -38,9 +38,16 @@ const Home = () => {
   const { claimContract, claimInfo } = useClaim(claimConfig);
   
 
-  const join = () => {
+  const join = async () => {
     if(!parentWallet) return;
-    joinContract();
+   
+    try{
+     await  joinContract();
+
+    }
+    catch(e){
+    
+    }
   };
 
   const claim = () => {
@@ -71,7 +78,8 @@ const Home = () => {
      >
       <>
       {idx + 1}
-         {i}
+         {/* {i} */}
+         {truncateAddress(i)}
          {
           copyList.index ===idx 
           ?
@@ -92,9 +100,9 @@ const Home = () => {
     <>
       <div className="">
         <div className="items-center text-xl text-blue-100 bg-black md:h-screen md:grid place-items-center">
-          <div className="max-w-5xl mx-auto md:grid md:grid-cols-6 ">
-            <div className="mb-8 md:col-end-4 md:col-start-1 md:mb-0">
-              <h1 className="mb-6 text-6xl font-bold leading-snug text-transparent bg-clip-text bg-gradient-to-br from-yellow-600 to-purple-800">
+          <div className="max-w-5xl mx-auto md:grid md:grid-cols-6  px-6 md:px-0">
+            <div className="mb-8 md:col-end-4 md:col-start-1 md:mb-0 pt-28 md:pt-0">
+              <h1 className=" mb-6 text-6xl font-bold leading-snug text-transparent bg-clip-text bg-gradient-to-br from-yellow-600 to-purple-800">
                 Game On Blockchain
               </h1>
               <p className="mb-4">

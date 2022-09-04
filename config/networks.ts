@@ -36,5 +36,6 @@ const chains = [
   chain.mainnet,
   chain.polygon,
   avalancheChain,
+  chain.rinkeby
 ];
 export default chains;

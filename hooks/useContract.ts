@@ -1,11 +1,12 @@
-import { useCallback } from "react";
+import { useCallback,useEffect, useState } from "react";
 import {
   useContractRead,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
   useFeeData,
-  useNetwork
+  useNetwork,
+
 } from "wagmi";
 import ABI from "../abis/abi.js";
 // import config from "../config/config.json"
@@ -13,11 +14,12 @@ import dappConfig from "../config/configGoerli.json";
 import { parseEther } from "ethers/lib/utils";
 import useToast from "../utils/useToast";
 import { EType } from "../Enums";
+// import chains from "../config/networks.js";
 
 
 const contractObj = {
   isSigner: false,
-  address: dappConfig.GAME_ADDRESS,
+  address: dappConfig.chains.default.address,
   funcName: "",
   abi: ABI,
   args: [],
@@ -29,10 +31,19 @@ const contractObj = {
 };
 
 
+const defaultContractAddress = dappConfig.chains.default.address 
+
 const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},) => {
   const toast = useToast();
   const { data:feeData } = useFeeData()
-  const {chain} = useNetwork()
+  const {chain, chains} = useNetwork()
+  const [contractAddress, setAddress] = useState(defaultContractAddress)
+  const chainName = chain?.network ?? 'default'
+
+  useEffect(()=>{
+    setAddress(dappConfig.chains[chainName]?.address)
+  },[chains])
+
   const finalValue = { ...contractObj, ...contractInput };
  
   const {
@@ -49,7 +60,7 @@ const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},
   } = finalValue;
   if (!funcName) return;
   const { config } = usePrepareContractWrite({
-    addressOrName: address,
+    addressOrName: contractAddress,
     contractInterface: abi,
     functionName: funcName,
     chainId:chain?.id ??  Number(dappConfig.CHAIN_ID),
@@ -63,6 +74,10 @@ const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},
       }),
     },
     args,
+    onError(error) {
+      errorCallBackConfirm(error);
+      // toast(error.message, "", EType.error);
+    },
   });
 
   const { writeAsync, ...writeData } = useContractWrite({
@@ -74,18 +89,18 @@ const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},
     hash: writeData?.data?.hash,
 
     onSuccess(msg) {
-      toast("transaction confirmed", writeData.data.hash, EType.success);
+      toast("Transaction Confirmed", writeData.data.hash, EType.success);
       successCallBackConfirm(msg);
-      // loadData(numberOfOpenEnds)
       successCallbackAction(msg)
     },
     onError(error) {
       errorCallBackConfirm(error);
+      toast(error.message, "", EType.error);
     },
   });
 
   const readData = useContractRead({
-    addressOrName: address,
+    addressOrName: contractAddress,
     contractInterface: abi,
     functionName: funcName,
     chainId:chain?.id ??  Number(dappConfig.CHAIN_ID),
@@ -97,7 +112,7 @@ const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},
       writeAsync?.()
         .then((data) => {
           successCallBack(data);
-          toast("transaction submitted successfully", writeData?.data?.hash);
+          toast("Transaction Submitted Successfully", writeData?.data?.hash);
         })
 
         .catch((e) => {
