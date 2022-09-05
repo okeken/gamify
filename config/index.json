@@ -6,7 +6,10 @@
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias assumenda quia magni ex odit expedita vel, quaerat ratione? Ad, laborum."
   ],
   "ActionBtnTx":"Start the Game",
-  "socialMediaLinks":["https://twitter.com/", "https:discord.com/"],
+  "socialMediaLinks":{
+    "twitterUrl":"https://twitter.com/",
+    "discordUrl":"https://discord.com/"
+  },
   "mailingTxt":"Join the mailing list",
   "youtubeUrl":"https://www.youtube.com/embed/tgbNymZ7vqY",
   "CHAIN_ID": 5,

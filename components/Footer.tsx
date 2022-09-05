@@ -2,9 +2,10 @@ import React from "react";
 import Discord from "./commons/Icons/Discord";
 import Envelope from "./commons/Icons/Envelope";
 import Twitter from "./commons/Icons/Twitter";
-import webSiteDetails from "../config/index.json"
+import config from "../config/index.json"
 
 export const Footer = () => {
+  const {twitterUrl, discordUrl} = config.socialMediaLinks
   return (
     <div className="py-4 text-white bg-gray-900">
       <footer className="max-w-5xl mx-auto">
@@ -19,8 +20,8 @@ export const Footer = () => {
             <div>
               <div className="flex items-center">
                 <div className="flex">
-                  <Discord className="mr-4" />
-                  <Twitter className="mr-4" />
+                <Discord url={discordUrl} className="mr-4" />
+                <Twitter url={twitterUrl} className="mr-4" />
                 </div>
               </div>
             </div>

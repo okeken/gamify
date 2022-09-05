@@ -3,8 +3,10 @@ import Image from 'next/image'
 import ConnectButton from "./commons/Button/ConnectButton";
 import Discord from "./commons/Icons/Discord";
 import Twitter from "./commons/Icons/Twitter";
+import config from "../config/index.json"
 
 export const HeaderNav = () => {
+  const {twitterUrl, discordUrl} = config.socialMediaLinks
   return (
     <>
       <div className="text-blue-100 bg-black ">
@@ -21,8 +23,8 @@ export const HeaderNav = () => {
           <div>
             <div className="flex items-center">
               <div className="flex">
-                <Discord className="mr-8" />
-                <Twitter className="mr-8" />
+                <Discord url={discordUrl} className="mr-8" />
+                <Twitter url={twitterUrl} className="mr-8" />
               </div>
               <ConnectButton />
             </div>
