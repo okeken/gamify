@@ -3,10 +3,11 @@ import {useNetwork} from "wagmi"
 import useContract from '../hooks/useContract';
 import getContract from '../utils/contract';
 import { useContractEvent, } from "wagmi";
-import gameConfig from "../config/configGoerli.json"
 import ABI from "../abis/abi"
 import Wallet from "ethereumjs-wallet"
-import config from "../config/configGoerli.json"
+import config from "../config/index.json"
+import useAddress from '../hooks/useAddress';
+import useRpc from '../hooks/useRpc';
 
 const {address:defaultAddress, rpcUrl:defaultRpcUrl} = config.chains.default
 
@@ -29,8 +30,8 @@ const {chain} = useNetwork()
 const currentNetworkName = chain?.network ?? 'default'
 const [number, setNumber] = useState(null)
 const [data, setData] = useState([])
-const [rpc, setRpc]  = useState(defaultRpcUrl)
-const [contractAddress, setContractAddress] = useState(defaultAddress)
+const contractAddress = useAddress()
+const rpc = useRpc()
 
 
 const loadData = async(number) => {
@@ -67,9 +68,6 @@ const loadData = async(number) => {
     if(typeof number ==='number' && number <=10 ){
         contract()  
     }
-
-    setContractAddress(config.chains[currentNetworkName]?.address)
-    setRpc(config.chains[currentNetworkName]?.rpcUrl)
   },[number, currentNetworkName, rpc])
 
   const trackEvent = (num)=>{
@@ -77,7 +75,7 @@ const loadData = async(number) => {
 
   }
   useContractEvent({
-    addressOrName: gameConfig.GAME_ADDRESS,
+    addressOrName: contractAddress,
     contractInterface: ABI,
     eventName:'availableList',
     listener: (event) => trackEvent(event[0]?.length)   

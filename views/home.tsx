@@ -1,13 +1,11 @@
 import React, {  useState,useContext } from "react";
-import useData from "../hooks/useData";
 import useJoin from "../hooks/useJoin";
-import { useNetwork } from "wagmi";
-import gameConfig from "../config/configGoerli.json";
 import useClaim from "../hooks/useClaim";
 import ClipBoard from "../components/commons/Icons/ClipBoard";
 import ClipBoardCheck from "../components/commons/Icons/ClipBoardCheck/index";
 import  {GameContext}  from "../context/gameContext";
 import truncateAddress from "../utils/truncateAddress";
+import webSiteDetails from "../config/index.json"
 
 
 const claimConfig = {
@@ -31,7 +29,7 @@ const Home = () => {
   const joinConfig = {
     name: "join",
     isSigner: true,
-    sendValue: { status: true, amt: gameConfig.PAYMENT_AMOUNT },
+    sendValue: { status: true, amt: webSiteDetails.PAYMENT_AMOUNT },
     successCallBackConfirm:clearJoin
   };
   const { contract: joinContract, info:joinInfo } = useJoin(joinConfig);
@@ -103,21 +101,17 @@ const Home = () => {
           <div className="max-w-5xl mx-auto md:grid md:grid-cols-6  px-6 md:px-0">
             <div className="mb-8 md:col-end-4 md:col-start-1 md:mb-0 pt-28 md:pt-0">
               <h1 className=" mb-6 text-6xl font-bold leading-snug text-transparent bg-clip-text bg-gradient-to-br from-yellow-600 to-purple-800">
-                Game On Blockchain
+               {webSiteDetails.HeroTitle}
               </h1>
-              <p className="mb-4">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestias assumenda quia magni ex odit expedita vel, quaerat
-                ratione? Ad, laborum.
-              </p>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestias assumenda quia magni ex odit expedita vel, quaerat
-                ratione? Ad, laborum.
-              </p>
+              {
+                webSiteDetails.HeroTexts.map((text, idx)=>( <p key={idx} className="mb-4">
+
+                  {text}
+                </p>))
+              }
 
               <button className="px-4 py-2 mt-10 text-xl border border-yellow-600 rounded-md">
-                Start the Game
+               {webSiteDetails.ActionBtnTx}
               </button>
             </div>
             <div className=" md:col-end-7 md:col-span-2">
@@ -126,7 +120,7 @@ const Home = () => {
                   className="relative"
                   width="100%"
                   height="450"
-                  src="https://www.youtube.com/embed/tgbNymZ7vqY"
+                  src={webSiteDetails.youtubeUrl}
                 ></iframe>
               </div>
             </div>

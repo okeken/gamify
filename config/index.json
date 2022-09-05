@@ -1,5 +1,14 @@
 {
   "APP_NAME": "Gamify",
+  "HeroTitle":"Game on BLockchain",
+  "HeroTexts":[
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias assumenda quia magni ex odit expedita vel, quaerat ratione? Ad, laborum.",
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias assumenda quia magni ex odit expedita vel, quaerat ratione? Ad, laborum."
+  ],
+  "ActionBtnTx":"Start the Game",
+  "socialMediaLinks":["https://twitter.com/", "https:discord.com/"],
+  "mailingTxt":"Join the mailing list",
+  "youtubeUrl":"https://www.youtube.com/embed/tgbNymZ7vqY",
   "CHAIN_ID": 5,
   "CHAIN_ID_DEC": "",
   "CHAIN_NAME": "",
@@ -7,7 +16,6 @@
   "CURRENCY_SYMBOL": "Eth",
   "RPC": "",
   "BLOCK_EXPLORER": "",
-  "GAME_ADDRESS": "0x04D8C11e38C717A74A9432e6d874211500cb1Fe6",
   "PAYMENT_AMOUNT": "1",
   "chains":{
     "default":{

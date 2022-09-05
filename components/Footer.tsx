@@ -2,6 +2,7 @@ import React from "react";
 import Discord from "./commons/Icons/Discord";
 import Envelope from "./commons/Icons/Envelope";
 import Twitter from "./commons/Icons/Twitter";
+import webSiteDetails from "../config/index.json"
 
 export const Footer = () => {
   return (

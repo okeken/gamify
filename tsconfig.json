@@ -16,5 +16,7 @@
     "jsx": "preserve",
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/useToast.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "noUnusedLocals": true,
+  "noUnusedParameters": true
 }

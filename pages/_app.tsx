@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../styles/global.css";
 import "react-toastify/dist/ReactToastify.css";
 import { WagmiConfig, createClient } from "wagmi";

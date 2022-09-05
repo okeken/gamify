@@ -1,8 +1,7 @@
 import { ethers } from "ethers";
-import config  from '../config/configGoerli.json'
+import config  from '../config/index.json'
 import ABI from "../abis/abi";
 
-const rpcUrl = "https://goerli.infura.io/v3/ba80361523fe423bb149026a490266f0";
 
 const getContract= (isSigner=false, address=config.chains.default.address, rpcUrl=config.chains.default.rpcUrl, abi=ABI, )=>{
     

@@ -6,15 +6,12 @@ import {
   useWaitForTransaction,
   useFeeData,
   useNetwork,
-
 } from "wagmi";
 import ABI from "../abis/abi.js";
-// import config from "../config/config.json"
-import dappConfig from "../config/configGoerli.json";
+import dappConfig from "../config/index.json";
 import { parseEther } from "ethers/lib/utils";
 import useToast from "../utils/useToast";
 import { EType } from "../Enums";
-// import chains from "../config/networks.js";
 
 
 const contractObj = {
@@ -36,13 +33,13 @@ const defaultContractAddress = dappConfig.chains.default.address
 const useContract = (contractInput = {}, successCallbackAction=(msg: any) => {},) => {
   const toast = useToast();
   const { data:feeData } = useFeeData()
-  const {chain, chains} = useNetwork()
+  const {chain} = useNetwork()
   const [contractAddress, setAddress] = useState(defaultContractAddress)
   const chainName = chain?.network ?? 'default'
 
   useEffect(()=>{
     setAddress(dappConfig.chains[chainName]?.address)
-  },[chains])
+  },[chainName])
 
   const finalValue = { ...contractObj, ...contractInput };
  
